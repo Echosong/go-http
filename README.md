@@ -6,31 +6,44 @@
 go get github.com/echosong/go-http
 
 
-## Demo
+## 模拟登录 github Demo
 ```
 package main
 
 import (
 	"github.com/Echosong/go-http"
 	"fmt"
+	"regexp"
+	"strings"
 	"net/url"
 )
 
 func main()  {
-	client := httpes.Http{"http://www.blog.com/"}
-	
-	rep,_ := client.PostForm("login", url.Values{"username":{"admin"}, "password":{"songfeiok"}})
+	client := httpes.Http{"https://github.com/"}
 
-	//rep,_ := client.Post("login", "username=admin&password=songfeiok")
+	rep, _ :=client.Get("/login");
+	var token = ""
+	if rep.StatusCode == 200 {
+		//<input name="authenticity_token" type="hidden" value="EXgxyA/ASyK1AR6AilW+W3THMqNLY7FL216R8AhfCnlSjX1mw3t4OGu7PqsR75CblY01gW0UyCYqkzj5ef75xw==" /></div>
+		html :=string(rep.Body[:]);
+		reg := regexp.MustCompile("<input name=\"authenticity_token\" type=\"hidden\" value=\"(\\S*)\" />")
+		regStr := reg.FindString(html);
+		str :=strings.Replace(regStr,"<input name=\"authenticity_token\" type=\"hidden\" value=\"","", -1)
+		token = strings.Replace(str, "\" />", "",-1)
+	}else{
+		fmt.Println(rep.StatusCode)
+		return ;
+	}
 
-	fmt.Printf("%s \n", rep.Body);
-	fmt.Println(rep.StatusCode);
-
-	rep1, _ :=client.Get("login")
-
-	fmt.Printf("%s \n", rep1.Body);
-	fmt.Println(rep1.StatusCode);
-
+	//login
+	repSession , _  := client.PostForm("session", url.Values{"authenticity_token":{token},"login":{"Your account"}, "password":{"Your password"}});
+	if repSession.StatusCode == 200{
+		//be sure
+		repIndex,_ := client.Get("settings/admin");
+		fmt.Printf("%s", repIndex.Body)
+	}else{
+		fmt.Println("fail");
+	}
 }
 
 ```
