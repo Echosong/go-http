@@ -19,7 +19,9 @@ import (
 func main()  {
 	client := httpes.Http{"http://www.blog.com/"}
 	
-	rep,_ := client.PostForm("login", url.Values{"username":{"admin"}, "password":{"songfeiok"}}) //client.Post("login", "username=admin&password=songfeiok")
+	rep,_ := client.PostForm("login", url.Values{"username":{"admin"}, "password":{"songfeiok"}})
+
+	//rep,_ := client.Post("login", "username=admin&password=songfeiok")
 
 	fmt.Printf("%s \n", rep.Body);
 	fmt.Println(rep.StatusCode);
