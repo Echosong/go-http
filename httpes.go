@@ -1,4 +1,4 @@
-package http
+package httpes
 
 import (
 	"net/http"
@@ -27,26 +27,25 @@ type ResponseBody struct {
 	StatusCode int
 }
 
-var client = http.Client{nil, nil, new(Jar), 99999999999992}
+var client = &http.Client{nil, nil, new(Jar), 99999999999992}
 
-func (http *Http) Post(url string, body string) (resp *ResponseBody, err error)   {
-
+func (http *Http) Post(url string, body string) ( *ResponseBody,  error)   {
 	rep, err := client.Post(http.Host+url, "application/x-www-form-urlencoded", strings.NewReader(body));
 	if err == nil{
-		resp.Body ,_= ioutil.ReadAll(rep.Body)
-		resp.StatusCode = rep.StatusCode
+		body ,_:= ioutil.ReadAll(rep.Body)
+		resp := &ResponseBody{Body:body, StatusCode:rep.StatusCode}
 		defer rep.Body.Close()
-		return  resp, nil
+		return resp , nil
 	}else{
 		return nil, err
 	}
 }
 
-func (http *Http) Get(url string)(resp *ResponseBody, err error)  {
+func (http *Http) Get(url string)( *ResponseBody,  error)  {
 	rep, err := client.Get(http.Host + url);
 	if err == nil{
-		resp.Body ,_= ioutil.ReadAll(rep.Body)
-		resp.StatusCode = rep.StatusCode
+		body ,_:= ioutil.ReadAll(rep.Body)
+		resp := &ResponseBody{Body:body, StatusCode:rep.StatusCode}
 		defer rep.Body.Close()
 		return  resp, nil
 	}else{
@@ -54,11 +53,11 @@ func (http *Http) Get(url string)(resp *ResponseBody, err error)  {
 	}
 }
 
-func  (http *Http) PostForm(url string, values url.Values)(resp *ResponseBody, err error)  {
+func  (http *Http) PostForm(url string, values url.Values)( *ResponseBody,  error)  {
 	rep, err := client.PostForm(http.Host+ url,values)
 	if err == nil{
-		resp.Body ,_= ioutil.ReadAll(rep.Body)
-		resp.StatusCode = rep.StatusCode
+		body ,_:= ioutil.ReadAll(rep.Body)
+		resp := &ResponseBody{Body:body, StatusCode:rep.StatusCode}
 		defer rep.Body.Close()
 		return  resp, nil
 	}else{
