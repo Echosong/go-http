@@ -1,3 +1,13 @@
+# go-http
+自动记录cookie 模拟请求 http 封装
+
+## 下载安装
+
+go get github.com/echosong/go-http
+
+
+## 模拟登录 github Demo
+```
 package main
 
 import (
@@ -34,3 +44,11 @@ func main() {
 	}
 
 }
+
+```
+
+## 主要实现
+
+   1. cookie 自动
+
+   2. 返回值处理
