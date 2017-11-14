@@ -6,7 +6,8 @@
 go get github.com/echosong/go-http
 
 
-···
+## Demo
+```
 package main
 
 import (
@@ -30,4 +31,10 @@ func main()  {
 
 }
 
-···
+```
+
+## 主要实现
+
+   1. cookie 自动
+
+   2. 返回值处理
