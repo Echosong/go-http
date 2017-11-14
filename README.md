@@ -34,7 +34,7 @@ func main() {
 		return;
 	}
 	//login
-	repSession, _ := client.PostForm("session", url.Values{"authenticity_token": {token}, "login": {"echosong"}, "password": {"Songfeiok123"}});
+	repSession, _ := client.PostForm("session", url.Values{"authenticity_token": {token}, "login": {"echosong"}, "password": {"Your password"}});
 	if repSession.StatusCode == 200 {
 		//be sure
 		repIndex, _ := client.Get("settings/admin");
